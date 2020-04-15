@@ -20,9 +20,8 @@ declare namespace Deno {
     disableResourceSanitizer?: boolean;
   }
 
-  /** Register a test which will be run when `deno test` is used on the command
-   * line and the containing module looks like a test module, or explicitly
-   * when `Deno.runTests` is used.  `fn` can be async if required.
+  /** 注册一个测试，它将在命令行执行 `deno test` 操作并且包含的模块看起来像一个测试模块时运行，
+   * 或者在使用 `Deno.runTests` 时显式运行。如果需要， `fn` 可以是异步的。
    *
    *          import {assert, fail, assertEquals} from "https://deno.land/std/testing/asserts.ts";
    *
@@ -37,7 +36,7 @@ declare namespace Deno {
    *            name: "example ignored test",
    *            ignore: Deno.build.os === "win"
    *            fn(): void {
-   *              //This test is ignored only on Windows machines
+   *              // 仅在 Windows 机器上忽略这个测试。
    *            },
    *          });
    *
@@ -52,9 +51,8 @@ declare namespace Deno {
    */
   export function test(t: TestDefinition): void;
 
-  /** Register a test which will be run when `deno test` is used on the command
-   * line and the containing module looks like a test module, or explicitly
-   * when `Deno.runTests` is used
+  /** 注册一个测试，它将在命令行执行 `deno test` 操作并且包含的模块看起来像一个测试模块时运行，
+   * 或者在使用 `Deno.runTests` 时显式运行。
    *
    *        import {assert, fail, assertEquals} from "https://deno.land/std/testing/asserts.ts";
    *
@@ -70,9 +68,8 @@ declare namespace Deno {
    **/
   export function test(fn: () => void | Promise<void>): void;
 
-  /** Register a test which will be run when `deno test` is used on the command
-   * line and the containing module looks like a test module, or explicitly
-   * when `Deno.runTests` is used
+  /** 注册一个测试，它将在命令行执行 `deno test` 操作并且包含的模块看起来像一个测试模块时运行，
+   * 或者在使用 `Deno.runTests` 时显式运行。
    *
    *        import {assert, fail, assertEquals} from "https://deno.land/std/testing/asserts.ts";
    *
@@ -169,11 +166,11 @@ declare namespace Deno {
    */
   export function loadavg(): number[];
 
-  /** Get the `hostname` of the machine the Deno process is running on.
+  /** 获取 Deno 进程所在的计算机主机名(`hostname`)。
    *
    *       console.log(Deno.hostname());
    *
-   *  Requires `allow-env` permission.
+   *  需要 `allow-env` 权限。
    */
   export function hostname(): string;
 
@@ -185,16 +182,14 @@ declare namespace Deno {
    */
   export function osRelease(): string;
 
-  /** Exit the Deno process with optional exit code. If no exit code is supplied
-   * then Deno will exit with return code of 0.
+  /** 退出 Deno 进程，可以指定退出码，若无则为 0。
    *
    *       Deno.exit(5);
    */
   export function exit(code?: number): never;
 
-  /** Returns a snapshot of the environment variables at invocation. Changing a
-   * property in the object will set that variable in the environment for the
-   * process. The environment object will only accept `string`s as values.
+  /** 返回调用时环境变量的快照。如果更改环境变量对象的属性，则会在进程的环境中设置该属性。
+   * 环境变量对象只接受 `string` 类型的值。
    *
    *       const myEnv = Deno.env();
    *       console.log(myEnv.SHELL);
@@ -202,18 +197,17 @@ declare namespace Deno {
    *       const newEnv = Deno.env();
    *       console.log(myEnv.TEST_VAR === newEnv.TEST_VAR);  //outputs "true"
    *
-   * Requires `allow-env` permission. */
+   * 需要 `allow-env` 权限 */
   export function env(): {
     [index: string]: string;
   };
 
-  /** Retrieve the value of an environment variable. Returns undefined if that
-   * key doesn't exist.
+  /** 获取环境变量的值。如果 `key` 不存在，则返回 `undefined`。
    *
    *       console.log(Deno.env("HOME"));  //e.g. outputs "/home/alice"
    *       console.log(Deno.env("MADE_UP_VAR"));  //outputs "Undefined"
    *
-   * Requires `allow-env` permission. */
+   * 需要 `allow-env` 权限 */
   export function env(key: string): string | undefined;
 
   /** **UNSTABLE** */
@@ -384,42 +378,38 @@ declare namespace Deno {
   export function dir(kind: DirKind): string | null;
 
   /**
-   * Returns the path to the current deno executable.
+   * 返回当前 deno 可执行文件的路径。
    *
    *       console.log(Deno.execPath());  //e.g. "/home/alice/.local/bin/deno"
    *
-   * Requires `allow-env` permission.
+   * 需要 `allow-env` 权限。
    */
   export function execPath(): string;
 
   /**
-   * **UNSTABLE**: Currently under evaluation to decide if explicit permission is
-   * required to get the value of the current working directory.
+   * **不稳定**: 获取当前工作目录是否需要明确的权限，目前正在评估中。
    *
-   * Return a string representing the current working directory.
+   * 返回当前工作目录的字符串。
    *
-   * If the current directory can be reached via multiple paths (due to symbolic
-   * links), `cwd()` may return any one of them.
+   * 如果当前目录可以通过多个路径访问（由于符号链接导致），可能会返回其中任意一个。
    *
    *       const currentWorkingDirectory = Deno.cwd();
    *
-   * Throws `Deno.errors.NotFound` if directory not available.
+   * 如果目录不存在，则抛出 `Deno.errors.NotFound`。
    */
   export function cwd(): string;
 
   /**
-   * **UNSTABLE**: Currently under evaluation to decide if explicit permission is
-   * required to change the current working directory.
+   * **不稳定**: 更改当前工作目录是否需要明确的权限，目前正在评估中。
    *
-   * Change the current working directory to the specified path.
+   * 将当前工作目录更改为指定路径。
    *
    *       Deno.chdir("/home/userA");
    *       Deno.chdir("../userB");
    *       Deno.chdir("C:\\Program Files (x86)\\Java");
    *
-   * Throws `Deno.errors.NotFound` if directory not found.
-   * Throws `Deno.errors.PermissionDenied` if the user does not have access
-   * rights
+   * 如果目录未被找到，则抛出 `Deno.errors.NotFound` 。
+   * 如果用户没有访问权限，则抛出 `Deno.errors.PermissionDenied` 。
    */
   export function chdir(directory: string): void;
 
@@ -468,6 +458,19 @@ declare namespace Deno {
      * after reading some bytes and also both of the allowed EOF behaviors.
      *
      * Implementations should not retain a reference to `p`.
+     */
+    /** 最多读取 `p.byteLength` 个字节到p中，然后返回读取的字节数（`0 < n <= p.byteLength`），并在遇到任何错误时返回拒绝状态的回调函数。
+      * 即使 `read()` 返回值为 `n < p.byteLength`，p也可能在调用期间被用作临时空间。
+      * 如果有数据可用，但不存在 `p.byteLength`，`read()` 通常会返回可用值，而不是等待更多。
+      * 
+      * 当 `read()` 遇到文件结束条件时，将返回 `Deno.EOF` 符号。
+      * 
+      * 当 `read()` 遇到错误时，它会返回拒绝状态的回调函数，参数值为错误信息。
+      * 
+      * 调用者应始终处理返回值为 `n > 0` 的情况，然后再考虑 `EOF`。
+      * 应正确处理在读取一些字节以及两种被允许的EOF行为之后可能发生的I/O错误。
+      *
+      * 实现不应保留对 `p` 的引用。
      */
     read(p: Uint8Array): Promise<number | EOF>;
   }
@@ -762,12 +765,11 @@ declare namespace Deno {
     whence: SeekMode
   ): Promise<number>;
 
-  /** Close the given resource ID (rid) which has been previously opened, such
-   * as via opening or creating a file.  Closing a file when you are finished
-   * with it is important to avoid leaking resources.
+  /** 使用给定的资源 ID (rid) 来关闭先前创建或打开的文件。
+   * 为避免资源泄露，事关重大，文件应当用完即关。
    *
    *      const file = await Deno.open("my_file.txt");
-   *      // do work with "file" object
+   *      // 与 "file" 对象一起使用
    *      Deno.close(file.rid);
    */
   export function close(rid: number): void;
@@ -875,69 +877,55 @@ declare namespace Deno {
    */
   export function setRaw(rid: number, mode: boolean): void;
 
-  /** A variable-sized buffer of bytes with `read()` and `write()` methods.
+  /** 一个具有 `read()` 和 `write()` 方法大小可变的字节缓冲区。
    *
-   * Based on [Go Buffer](https://golang.org/pkg/bytes/#Buffer). */
+   * 基于 [Go Buffer](https://golang.org/pkg/bytes/#Buffer)。 */
   export class Buffer implements Reader, SyncReader, Writer, SyncWriter {
     constructor(ab?: ArrayBuffer);
-    /** Returns a slice holding the unread portion of the buffer.
+    /** 返回一个缓冲区未读部分的片段。
      *
-     * The slice is valid for use only until the next buffer modification (that
-     * is, only until the next call to a method like `read()`, `write()`,
-     * `reset()`, or `truncate()`). The slice aliases the buffer content at
-     * least until the next buffer modification, so immediate changes to the
-     * slice will affect the result of future reads. */
+     * 该片段只在下一次缓冲区修改之前有效 (即, 只有在下一次调用像 `read()`, `write()`,
+     * `reset()`, 或者 `truncate()` 这样的方法)。
+     * 该片段会在下一次修改缓冲区内容之前将缓冲区内容进行别名处理 ,  所以立刻改变片段会影响未来读取的结果。 */
     bytes(): Uint8Array;
-    /** Returns the contents of the unread portion of the buffer as a `string`.
+    /** 将缓冲区中未读部分的内容以 `string` 的形式返回。
      *
-     * **Warning**: if multibyte characters are present when data is flowing
-     * through the buffer, this method may result in incorrect strings due to a
-     * character being split. */
+     * **警告**: 当数据流经缓冲区时存在多个字节, 这种方法可能会因为字符被拆分而导致字符串的结果错误。 */
     toString(): string;
-    /** Returns whether the unread portion of the buffer is empty. */
+    /** 返回缓冲区的未读部分是否为空。 */
     empty(): boolean;
-    /** A read only number of bytes of the unread portion of the buffer. */
+    /** 只读缓冲区未读部分的字节数。 */
     readonly length: number;
-    /** The read only capacity of the buffer's underlying byte slice, that is,
-     * the total space allocated for the buffer's data. */
+    /** 缓冲区底层字节片段的只读容量，即为缓冲区数据分配的总空间。 */
     readonly capacity: number;
-    /** Discards all but the first `n` unread bytes from the buffer but
-     * continues to use the same allocated storage. It throws if `n` is
-     * negative or greater than the length of the buffer. */
+    /** 除了缓冲器中开头 `n` 个未读字节之外，其他的所有字节都丢弃，但是继续使用相同分配的存储空间。
+     * 当 `n` 为负数或者大于缓冲区的长度, 则会抛出异常。 */
     truncate(n: number): void;
-    /** Resets the buffer to be empty, but it retains the underlying storage for
-     * use by future writes. `.reset()` is the same as `.truncate(0)`. */
+    /** 将缓冲区重置为空，但它保留了底层存储供未来写入时使用，`.reset()` 与 `.truncate(0)` 相同。 */
     reset(): void;
-    /** Reads the next `p.length` bytes from the buffer or until the buffer is
-     * drained. Returns the number of bytes read. If the buffer has no data to
-     * return, the return is `Deno.EOF`. */
+    /** 在缓冲区中读取下一个 `p.length` 字节，或直到缓冲区用完为止。
+     * 返回只读的字节数。当缓冲区没有数据返回，则返回值为 `Deno.EOF`。 */
     readSync(p: Uint8Array): number | EOF;
-    /** Reads the next `p.length` bytes from the buffer or until the buffer is
-     * drained. Resolves to the number of bytes read. If the buffer has no
-     * data to return, resolves to `Deno.EOF`. */
+    /** 在缓冲区中读取下一个 `p.length` 字节，或直到缓冲区用完为止。
+     * 解析读取的字节数。当缓冲区没有数据返回，则解析为 `Deno.EOF`。 */
     read(p: Uint8Array): Promise<number | EOF>;
     writeSync(p: Uint8Array): number;
     write(p: Uint8Array): Promise<number>;
-    /** Grows the buffer's capacity, if necessary, to guarantee space for
-     * another `n` bytes. After `.grow(n)`, at least `n` bytes can be written to
-     * the buffer without another allocation. If `n` is negative, `.grow()` will
-     * throw. If the buffer can't grow it will throw an error.
-     *
-     * Based on Go Lang's
+    /** 增加缓冲区的容量，必要时保证另一个 `n` 字节的空间。
+     * 在 `.grow(n)` 之后，至少可以将 `n` 个字节写到缓冲区中而不需要另外分配。
+     * 若 `n` 为负数，`.grow()` 将抛出异常。
+     * 当缓冲区不能增加的时候会抛出错误。
+     * 基于 Go Lang 的
      * [Buffer.Grow](https://golang.org/pkg/bytes/#Buffer.Grow). */
     grow(n: number): void;
-    /** Reads data from `r` until `Deno.EOF` and appends it to the buffer,
-     * growing the buffer as needed. It resolves to the number of bytes read.
-     * If the buffer becomes too large, `.readFrom()` will reject with an error.
-     *
-     * Based on Go Lang's
+    /** 从 `r` 读取数据直到 `Deno.EOF`，并将其附加到缓冲区，根据需要扩展缓冲区。
+     * 解析读取的字节数。 如果缓冲区过大，`.readFrom()` 将会 reject 一个错误。
+     * 基于 Go Lang 的
      * [Buffer.ReadFrom](https://golang.org/pkg/bytes/#Buffer.ReadFrom). */
     readFrom(r: Reader): Promise<number>;
-    /** Reads data from `r` until `Deno.EOF` and appends it to the buffer,
-     * growing the buffer as needed. It returns the number of bytes read. If the
-     * buffer becomes too large, `.readFromSync()` will throw an error.
-     *
-     * Based on Go Lang's
+    /** 从 `r` 读取数据直到 `Deno.EOF`，并将其附加到缓冲区，根据需要扩展缓冲区。
+     * 返回读取的字节数，如果缓冲区过大，`.readFromSync()` 将会抛出错误。
+     * 基于 Go Lang 的
      * [Buffer.ReadFrom](https://golang.org/pkg/bytes/#Buffer.ReadFrom). */
     readFromSync(r: SyncReader): number;
   }
@@ -1035,26 +1023,26 @@ declare namespace Deno {
     mode?: number;
   }
 
-  /** Synchronously creates a new directory with the specified path.
+  /** 同步地在指定路径下创建一个新的目录。
    *
    *       Deno.mkdirSync("new_dir");
    *       Deno.mkdirSync("nested/directories", { recursive: true });
    *       Deno.mkdirSync("restricted_access_dir", { mode: 0o700 });
    *
-   * Defaults to throwing error if the directory already exists.
+   * 目录存在的情况下，默认抛出错误。
    *
-   * Requires `allow-write` permission. */
+   * 需要 `allow-write` 权限。 */
   export function mkdirSync(path: string, options?: MkdirOptions): void;
 
-  /** Creates a new directory with the specified path.
+  /** 在指定路径下创建一个新的目录。
    *
    *       await Deno.mkdir("new_dir");
    *       await Deno.mkdir("nested/directories", { recursive: true });
    *       await Deno.mkdir("restricted_access_dir", { mode: 0o700 });
    *
-   * Defaults to throwing error if the directory already exists.
+   * 目录存在的情况下，默认抛出错误。
    *
-   * Requires `allow-write` permission. */
+   * 需要 `allow-write` 权限。 */
   export function mkdir(path: string, options?: MkdirOptions): Promise<void>;
 
   export interface MakeTempOptions {
@@ -1240,31 +1228,28 @@ declare namespace Deno {
   ): Promise<void>;
 
   export interface RemoveOptions {
-    /** Defaults to `false`. If set to `true`, path will be removed even if
-     * it's a non-empty directory. */
+    /** 默认为 `false`。如果设置为 `true`，则即使路径为非空目录也会被删除。 */
     recursive?: boolean;
   }
 
-  /** Synchronously removes the named file or directory.
+  /** 同步删除指定的文件或目录。
    *
    *       Deno.removeSync("/path/to/empty_dir/or/file");
    *       Deno.removeSync("/path/to/populated_dir/or/file", { recursive: true });
    *
-   * Throws error if permission denied, path not found, or path is a non-empty
-   * directory and the `recursive` option isn't set to `true`.
+   * 当权限被拒绝、路径找不到或者为非空目录且 `recursive` 未设置为 `true`，则抛出异常。
    *
-   * Requires `allow-write` permission. */
+   * 需要 `allow-write` 权限 */
   export function removeSync(path: string, options?: RemoveOptions): void;
 
-  /** Removes the named file or directory.
+  /** 删除指定的文件或目录。
    *
    *       await Deno.remove("/path/to/empty_dir/or/file");
    *       await Deno.remove("/path/to/populated_dir/or/file", { recursive: true });
    *
-   * Throws error if permission denied, path not found, or path is a non-empty
-   * directory and the `recursive` option isn't set to `true`.
+   * 当权限被拒绝、路径找不到或者为非空目录且 `recursive` 未设置为 `true`，则抛出异常。
    *
-   * Requires `allow-write` permission. */
+   * 需要 `allow-write` 权限 */
   export function remove(path: string, options?: RemoveOptions): Promise<void>;
 
   /** Synchronously renames (moves) `oldpath` to `newpath`. Paths may be files or
@@ -1387,56 +1372,54 @@ declare namespace Deno {
     isSymlink(): boolean;
   }
 
-  /** Returns absolute normalized path, with symbolic links resolved.
+  /** 返回被解析后的符号链接绝对路径。
    *
-   *       // e.g. given /home/alice/file.txt and current directory /home/alice
+   *       // 例如: 给定文件 /home/alice/file.txt 和当前目录 /home/alice
    *       Deno.symlinkSync("file.txt", "symlink_file.txt");
    *       const realPath = Deno.realpathSync("./file.txt");
    *       const realSymLinkPath = Deno.realpathSync("./symlink_file.txt");
-   *       console.log(realPath);  // outputs "/home/alice/file.txt"
-   *       console.log(realSymLinkPath);  //outputs "/home/alice/file.txt"
+   *       console.log(realPath);  //输出 "/home/alice/file.txt"
+   *       console.log(realSymLinkPath);  //输出 "/home/alice/file.txt"
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function realpathSync(path: string): string;
 
-  /** Resolves to the absolute normalized path, with symbolic links resolved.
+  /** 返回被解析后的符号链接绝对路径。
    *
-   *       // e.g. given /home/alice/file.txt and current directory /home/alice
+   *       // 例如: 给定文件 /home/alice/file.txt 和当前目录 /home/alice
    *       await Deno.symlink("file.txt", "symlink_file.txt");
    *       const realPath = await Deno.realpath("./file.txt");
    *       const realSymLinkPath = await Deno.realpath("./symlink_file.txt");
    *       console.log(realPath);  // outputs "/home/alice/file.txt"
    *       console.log(realSymLinkPath);  //outputs "/home/alice/file.txt"
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function realpath(path: string): Promise<string>;
 
-  /** UNSTABLE: This API is likely to change to return an iterable object instead
+  /** 不稳定：此 API 可能会更改为返回一个可迭代对象
    *
-   * Synchronously reads the directory given by `path` and returns an array of
-   * `Deno.FileInfo`.
+   * 同步读取 `path` 文件目录，并返回 `Deno.FileInfo` 数组。
    *
    *       const files = Deno.readdirSync("/");
    *
-   * Throws error if `path` is not a directory.
+   * 如果 `path` 不是目录则抛出错误。
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function readdirSync(path: string): FileInfo[];
 
-  /** UNSTABLE: This API is likely to change to return an `AsyncIterable`.
+  /** 不稳定：此 API 返回值可能更改为 `AsyncIterable`。
    *
-   * Reads the directory given by `path` and resolves to an array of `Deno.FileInfo`.
+   * 读取 `path` 文件目录，并返回 `Deno.FileInfo` 数组。
    *
    *       const files = await Deno.readdir("/");
    *
-   * Throws error if `path` is not a directory.
+   * 如果 `path` 不是目录则抛出错误。
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function readdir(path: string): Promise<FileInfo[]>;
 
-  /** Synchronously copies the contents and permissions of one file to another
-   * specified path, by default creating a new file if needed, else overwriting.
-   * Fails if target path is a directory or is unwritable.
+  /** 采用同步方式将一个文件的内容和权限复制到另一个指定的路径，默认情况下根据需要
+   * 创建新文件或者覆盖原文件。 如果目标路径是目录或不可写，则失败。
    *
    *       Deno.copyFileSync("from.txt", "to.txt");
    *
@@ -1444,148 +1427,140 @@ declare namespace Deno {
    * Requires `allow-write` permission on toPath. */
   export function copyFileSync(fromPath: string, toPath: string): void;
 
-  /** Copies the contents and permissions of one file to another specified path,
-   * by default creating a new file if needed, else overwriting. Fails if target
-   * path is a directory or is unwritable.
+  /** 将一个文件的内容和权限复制到另一个指定的路径，默认情况下根据需要
+   * 创建新文件或者覆盖原文件。 如果目标路径是目录或不可写，则失败。
    *
    *       await Deno.copyFile("from.txt", "to.txt");
    *
-   * Requires `allow-read` permission on fromPath.
-   * Requires `allow-write` permission on toPath. */
+   * `fromPath` 需要 `allow-read` 权限。
+   * `toPath` 需要 `allow-write` 权限。 */
   export function copyFile(fromPath: string, toPath: string): Promise<void>;
 
-  /** Returns the full path destination of the named symbolic link.
+  /** 同步方式解析并返回符号链接对目标文件的绝对路径。
    *
    *       Deno.symlinkSync("./test.txt", "./test_link.txt");
-   *       const target = Deno.readlinkSync("./test_link.txt"); // full path of ./test.txt
+   *       const target = Deno.readlinkSync("./test_link.txt"); // ./test.txt 的绝对路径
    *
-   * Throws TypeError if called with a hard link
+   * 如果使用硬链接调用，则会抛出 `TypeError`。
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function readlinkSync(path: string): string;
 
-  /** Resolves to the full path destination of the named symbolic link.
+  /** 解析并返回符号链接对目标文件的绝对路径。
    *
    *       await Deno.symlink("./test.txt", "./test_link.txt");
-   *       const target = await Deno.readlink("./test_link.txt"); // full path of ./test.txt
+   *       const target = await Deno.readlink("./test_link.txt"); // ./test.txt 的绝对路径
    *
-   * Throws TypeError if called with a hard link
+   * 如果使用硬链接调用，则会抛出 `TypeError`。
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function readlink(path: string): Promise<string>;
 
-  /** Resolves to a `Deno.FileInfo` for the specified `path`. If `path` is a
-   * symlink, information for the symlink will be returned instead of what it
-   * points to.
+  /** 解析给定的 `path`，并返回 `Deno.FileInfo`。如果 `path` 是一个
+   * 符号链接，则将返回符号链接的信息，而不是该符号链接引用的文件信息。
    *
    *       const fileInfo = await Deno.lstat("hello.txt");
    *       assert(fileInfo.isFile());
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function lstat(path: string): Promise<FileInfo>;
 
-  /** Synchronously returns a `Deno.FileInfo` for the specified `path`. If
-   * `path` is a symlink, information for the symlink will be returned instead of
-   * what it points to..
+  /** 同步方式解析给定的 `path`，并返回 `Deno.FileInfo`。如果 `path` 是一个
+   * 符号链接，则将返回符号链接的信息，而不是该符号链接引用的文件信息。
    *
    *       const fileInfo = Deno.lstatSync("hello.txt");
    *       assert(fileInfo.isFile());
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function lstatSync(path: string): FileInfo;
 
-  /** Resolves to a `Deno.FileInfo` for the specified `path`. Will always
-   * follow symlinks.
+  /** 解析给定 `path`，返回 `Deno.FileInfo`。如果 `path` 为符号链接，则返回符号链接指向的文件。
    *
    *       const fileInfo = await Deno.stat("hello.txt");
    *       assert(fileInfo.isFile());
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function stat(path: string): Promise<FileInfo>;
 
-  /** Synchronously returns a `Deno.FileInfo` for the specified `path`. Will
-   * always follow symlinks.
+  /** 同步方式解析给定 `path`，返回 `Deno.FileInfo`。
+   * 如果 `path` 为符号链接，则返回符号链接指向的文件。
    *
    *       const fileInfo = Deno.statSync("hello.txt");
    *       assert(fileInfo.isFile());
    *
-   * Requires `allow-read` permission. */
+   * 需要 `allow-read` 权限 */
   export function statSync(path: string): FileInfo;
 
-  /** Synchronously creates `newpath` as a hard link to `oldpath`.
+  /** 同步方式创建 `newpath` 作为 `oldpath` 的硬链接。
    *
    *       Deno.linkSync("old/name", "new/name");
    *
-   * Requires `allow-read` and `allow-write` permissions. */
+   * 需要 `allow-read` 和 `allow-write` 权限 */
   export function linkSync(oldpath: string, newpath: string): void;
 
-  /** Creates `newpath` as a hard link to `oldpath`.
+  /** 创建 `newpath` 作为 `oldpath` 的硬链接。
    *
    *       await Deno.link("old/name", "new/name");
    *
-   * Requires `allow-read` and `allow-write` permissions. */
+   * 需要 `allow-read` 和 `allow-write` 权限 */
   export function link(oldpath: string, newpath: string): Promise<void>;
 
-  /** **UNSTABLE**: `type` argument type may be changed to `"dir" | "file"`.
+  /** **不稳定**：`type` 参数可能更改为 `"dir" | "file"` 的联合类型。
    *
-   * Creates `newpath` as a symbolic link to `oldpath`.
+   * 同步方式创建 `newpath` 作为指向 `oldpath` 的符号链接。
    *
-   * The type argument can be set to `dir` or `file`. This argument is only
-   * available on Windows and ignored on other platforms.
+   * `type` 参数可以设置为 `dir` 或 `file`。此参数仅在 Windows 上可用，其他平台会被忽略。
    *
-   * NOTE: This function is not yet implemented on Windows.
+   * 注意：此函数尚未在 Windows 上实现。
    *
    *       Deno.symlinkSync("old/name", "new/name");
    *
-   * Requires `allow-read` and `allow-write` permissions. */
+   * 需要 `allow-read` 和 `allow-write` 权限 */
   export function symlinkSync(
     oldpath: string,
     newpath: string,
     type?: string
   ): void;
 
-  /** **UNSTABLE**: `type` argument may be changed to `"dir" | "file"`
+  /** **不稳定**：`type` 参数可能更改为 `"dir" | "file"` 的联合类型。
    *
-   * Creates `newpath` as a symbolic link to `oldpath`.
+   * 创建 `newpath` 作为指向 `oldpath` 的符号链接。
    *
-   * The type argument can be set to `dir` or `file`. This argument is only
-   * available on Windows and ignored on other platforms.
+   * `type` 参数可以设置为 `dir` 或 `file`。此参数仅在 Windows 上可用，其他平台会被忽略。
    *
-   * NOTE: This function is not yet implemented on Windows.
+   * 注意：此函数尚未在 Windows 上实现。
    *
    *       await Deno.symlink("old/name", "new/name");
    *
-   * Requires `allow-read` and `allow-write` permissions. */
+   * 需要 `allow-read` 和 `allow-write` 权限 */
   export function symlink(
     oldpath: string,
     newpath: string,
     type?: string
   ): Promise<void>;
 
-  /** Options for writing to a file. */
+  /** `Deno.writeFileSync` 和 `Deno.writeFile` 的选项。*/
   export interface WriteFileOptions {
-    /** Defaults to `false`. If set to `true`, will append to a file instead of
-     * overwriting previous contents. */
+    /** 默认为 `false`。如果设置为 `true`，
+     * 则将追加到文件中，而不是覆盖之前的内容。 */
     append?: boolean;
-    /** Sets the option to allow creating a new file, if one doesn't already
-     * exist at the specified path (defaults to `true`). */
+    /** 默认为 `true`。如果指定路径不存在
+     * 文件，是否允许创建新文件的选项。*/
     create?: boolean;
-    /** Permissions always applied to file. */
+    /** 文件的权限。*/
     mode?: number;
   }
 
-  /** Synchronously write `data` to the given `path`, by default creating a new
-   * file if needed, else overwriting.
+  /** 同步方式将 `data` 写入给定的 `path`，并且根据需要创建新文件或者覆盖原文件。
    *
    *       const encoder = new TextEncoder();
    *       const data = encoder.encode("Hello world\n");
-   *       Deno.writeFileSync("hello1.txt", data);  //overwrite "hello.txt" or create it
-   *       Deno.writeFileSync("hello2.txt", data, {create: false});  //only works if "hello2.txt" exists
-   *       Deno.writeFileSync("hello3.txt", data, {mode: 0o777});  //set permissions on new file
-   *       Deno.writeFileSync("hello4.txt", data, {append: true});  //add data to the end of the file
+   *       Deno.writeFileSync("hello1.txt", data);  // 覆盖或者创建 "hello1.txt"
+   *       Deno.writeFileSync("hello2.txt", data, {create: false});  // 仅当 "hello2.txt" 存在的情况下才有效
+   *       Deno.writeFileSync("hello3.txt", data, {mode: 0o777});  // 设置新文件的权限
+   *       Deno.writeFileSync("hello4.txt", data, {append: true});  // 在文件末尾添加数据
    *
-   * Requires `allow-write` permission, and `allow-read` if `options.create` is
-   * `false`.
+   * 需要 `allow-write` 权限。如果 `options.create` 为 `false` 且需要 `allow-read` 权限。
    */
   export function writeFileSync(
     path: string,
@@ -1593,17 +1568,16 @@ declare namespace Deno {
     options?: WriteFileOptions
   ): void;
 
-  /** Write `data` to the given `path`, by default creating a new file if needed,
-   * else overwriting.
+  /** 将 `data` 写入给定的 `path`，并且根据需要创建新文件或者覆盖原文件。
    *
    *       const encoder = new TextEncoder();
    *       const data = encoder.encode("Hello world\n");
-   *       await Deno.writeFile("hello1.txt", data);  //overwrite "hello.txt" or create it
-   *       await Deno.writeFile("hello2.txt", data, {create: false});  //only works if "hello2.txt" exists
-   *       await Deno.writeFile("hello3.txt", data, {mode: 0o777});  //set permissions on new file
-   *       await Deno.writeFile("hello4.txt", data, {append: true});  //add data to the end of the file
+   *       await Deno.writeFile("hello1.txt", data);  // 覆盖或者创建 "hello1.txt"
+   *       await Deno.writeFile("hello2.txt", data, {create: false});  // 仅当 "hello2.txt" 存在的情况下才有效
+   *       await Deno.writeFile("hello3.txt", data, {mode: 0o777});  // 设置新文件的权限
+   *       await Deno.writeFile("hello4.txt", data, {append: true});  // 在文件末尾添加数据
    *
-   * Requires `allow-write` permission, and `allow-read` if `options.create` is `false`.
+   * 需要 `allow-write` 权限。如果 `options.create` 为 `false` 且需要 `allow-read` 权限。
    */
   export function writeFile(
     path: string,
@@ -1668,11 +1642,11 @@ declare namespace Deno {
     Http: ErrorConstructor;
   };
 
-  /** **UNSTABLE**: potentially want names to overlap more with browser.
+  /** **不稳定**：希望与浏览器在名称上有更多的相同。
    *
-   * The permissions as granted by the caller.
+   * 调用方授予的权限。
    *
-   * See: https://w3c.github.io/permissions/#permission-registry */
+   * 具体查看：https://w3c.github.io/permissions/#permission-registry */
   export type PermissionName =
     | "run"
     | "read"
@@ -1682,9 +1656,9 @@ declare namespace Deno {
     | "plugin"
     | "hrtime";
 
-  /** The current status of the permission.
+  /** 权限的状态。
    *
-   * See: https://w3c.github.io/permissions/#status-of-a-permission */
+   * 具体查看：https://w3c.github.io/permissions/#status-of-a-permission */
   export type PermissionState = "granted" | "denied" | "prompt";
 
   interface RunPermissionDescriptor {
@@ -1713,10 +1687,9 @@ declare namespace Deno {
     name: "hrtime";
   }
 
-  /** Permission descriptors which define a permission which can be queried,
-   * requested, or revoked.
+  /** 权限描述符，定义一个可以查询、请求或撤销的权限。
    *
-   * See: https://w3c.github.io/permissions/#permission-descriptor */
+   * 具体查看：https://w3c.github.io/permissions/#permission-descriptor */
   type PermissionDescriptor =
     | RunPermissionDescriptor
     | ReadWritePermissionDescriptor
@@ -1726,7 +1699,7 @@ declare namespace Deno {
     | HrtimePermissionDescriptor;
 
   export class Permissions {
-    /** Resolves to the current status of a permission.
+    /** 查询给定权限的状态。
      *
      *       const status = await Deno.permissions.query({ name: "read", path: "/etc" });
      *       if (status.state === "granted") {
@@ -1735,14 +1708,14 @@ declare namespace Deno {
      */
     query(desc: PermissionDescriptor): Promise<PermissionStatus>;
 
-    /** Revokes a permission, and resolves to the state of the permission.
+    /** 撤销给定的权限，并且返回该权限的状态。
      *
      *       const status = await Deno.permissions.revoke({ name: "run" });
-     *       assert(status.state !== "granted")
+     *       console.assert(status.state !== "granted")
      */
     revoke(desc: PermissionDescriptor): Promise<PermissionStatus>;
 
-    /** Requests the permission, and resolves to the state of the permission.
+    /** 请求权限，并且返回该权限请求结果的状态。
      *
      *       const status = await Deno.permissions.request({ name: "env" });
      *       if (status.state === "granted") {
@@ -1754,10 +1727,10 @@ declare namespace Deno {
     request(desc: PermissionDescriptor): Promise<PermissionStatus>;
   }
 
-  /** **UNSTABLE**: maybe move to `navigator.permissions` to match web API. */
+  /** **不稳定**：可能移动到 `navigator.permissions` 以匹配 web API。 */
   export const permissions: Permissions;
 
-  /** see: https://w3c.github.io/permissions/#permissionstatus */
+  /** 具体查看：https://w3c.github.io/permissions/#permissionstatus */
   export class PermissionStatus {
     state: PermissionState;
     constructor(state: PermissionState);
